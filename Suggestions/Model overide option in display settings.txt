@@ -1,0 +1,148 @@
+Problem:
+Currently, tridents and spyglasses exhibit a unique behavior with models, namely that a different model is selected for third/first person compared to gui/fixed/ground. This is hardcoded.
+
+
+Suggested change summary:
+Add the field "model": "minecraft:item/trident_in_hand" to models' display options.
+
+
+How it works:
+This field will change what model is used in this display. It cannot be combined with scale/translation/rotation values as they get overwritten anyways.
+Upon going into the display property and overriding the model used, that model is final, its scale/translation/rotation values will be used and the "model" field ignored.
+Providing only the model field will not nullify the parent's scale/translation/rotation values in case this model is selected by another display override.
+Overrides list is first considered, then the display model override, as the overrides list is only considered for the first model selected.
+
+Example applied:
+
+minecraft:item/trident.json:
+{
+    "parent": "minecraft:item/generated",
+    "textures": {
+        "layer0": "minecraft:item/trident"
+    },
+    "display": {
+        "thirdperson_righthand": {
+            "model": "minecraft:item/trident_in_hand"
+        },
+        "thirdperson_lefthand": {
+            "model": "minecraft:item/trident_in_hand"
+        },
+        "firstperson_righthand": {
+            "model": "minecraft:item/trident_in_hand"
+        },
+        "firstperson_lefthand": {
+            "model": "minecraft:item/trident_in_hand"
+        }
+    },
+    "overrides": [
+       {
+            "predicate": {
+                "throwing": 1
+            },
+            "model": "minecraft:item/trident_throwing"
+        }
+    ]
+}
+
+minecraft:item/trident_in_hand.json:
+{
+    "parent": "builtin/entity",
+    "gui_light": "front",
+    "textures": {
+        "particle": "minecraft:item/trident"
+    },
+    "display": {
+        "thirdperson_righthand": {
+            "rotation": [ 0, 60, 0 ],
+            "translation": [ 11, 17, -2 ],
+            "scale": [ 1, 1, 1 ]
+        },
+        "thirdperson_lefthand": {
+            "rotation": [ 0, 60, 0 ],
+            "translation": [ 3, 17, 12 ],
+            "scale": [ 1, 1, 1 ]
+        },
+        "firstperson_righthand": {
+            "rotation": [ 0, -90, 25 ],
+            "translation": [ -3, 17, 1],
+            "scale": [ 1, 1, 1 ]
+        },
+        "firstperson_lefthand": {
+            "rotation": [ 0, 90, -25 ],
+            "translation": [ 13, 17, 1],
+            "scale": [ 1, 1, 1 ]
+        },
+        "gui": {
+            "rotation": [ 15, -25, -5 ],
+            "translation": [ 2, 3, 0 ],
+            "scale": [ 0.65, 0.65, 0.65 ],
+            "model": "minecraft:item/trident"
+        },
+        "fixed": {
+            "rotation": [ 0, 180, 0 ],
+            "translation": [ -2, 4, -5],
+            "scale":[ 0.5, 0.5, 0.5],
+            "model": "minecraft:item/trident"
+        },
+        "ground": {
+            "rotation": [ 0, 0, 0 ],
+            "translation": [ 4, 4, 2],
+            "scale":[ 0.25, 0.25, 0.25],
+            "model": "minecraft:item/trident"
+        }
+    }
+}
+
+minecraft:item/trident_throwing.json:
+{
+    "parent": "builtin/entity",
+    "gui_light": "front",
+    "textures": {
+        "particle": "minecraft:item/trident"
+    },
+    "display": {
+        "thirdperson_righthand": {
+            "rotation": [ 0, 90, 180 ],
+            "translation": [ 8, -17, 9 ],
+            "scale": [ 1, 1, 1 ]
+        },
+        "thirdperson_lefthand": {
+            "rotation": [ 0, 90, 180 ],
+            "translation": [ 8, -17, -7 ],
+            "scale": [ 1, 1, 1 ]
+        },
+        "firstperson_righthand": {
+            "rotation": [ 0, -90, 25 ],
+            "translation": [ -3, 17, 1],
+            "scale": [ 1, 1, 1 ]
+        },
+        "firstperson_lefthand": {
+            "rotation": [ 0, 90, -25 ],
+            "translation": [  13, 17, 1],
+            "scale": [ 1, 1, 1 ]
+        },
+        "gui": {
+            "rotation": [ 15, -25, -5 ],
+            "translation": [ 2, 3, 0 ],
+            "scale": [ 0.65, 0.65, 0.65 ],
+            "model": "minecraft:item/trident"
+        },
+        "fixed": {
+            "rotation": [ 0, 180, 0 ],
+            "translation": [ -2, 4, -5],
+            "scale":[ 0.5, 0.5, 0.5],
+            "model": "minecraft:item/trident"
+        },
+        "ground": {
+            "rotation": [ 0, 0, 0 ],
+            "translation": [ 4, 4, 2],
+            "scale":[ 0.25, 0.25, 0.25],
+            "model": "minecraft:item/trident"
+        }
+    }
+}
+
+Notes:
+The "loop" from trident -> tirdent_throwing -> trident is because the overrides are only read for the FIRST model, not any child.
+ That means that the trident must first select the throwing model based on the predicate, and then revert back to the base model for the gui, fixed and ground slots.
+The rotation, transformation and scale values are defined alongside the model field for trident_in_hand and trident_throwing in case the corresponding model is selected as a display model override.

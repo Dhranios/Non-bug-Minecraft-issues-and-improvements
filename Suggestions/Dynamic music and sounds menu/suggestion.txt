@@ -1,0 +1,39 @@
+Problem:
+Currently, the music & sounds menu has a few sliders and a master volume. This makes it impossible to mute zombies, but not skeletons (for example).
+
+
+Suggested change summary:
+Generate the menus based on the sound event IDs.
+
+
+How it works:
+Every menu has a "master" slider that has the same name as the currently selected menu, with the exception of the namespace menu.
+A button is created for every group (A sound event group is separated by periods (block.glass.hit = block group, glass group, hit sound)).
+If the group has only 1 child, it skips a group step (minecraft:example.sound.event and minecraft:example.sound.played will skip the "example" button and go straight to the "sound" button).
+If the case exists where one sound event is a group of another ("ambient.underwater.loop", "ambient.underwater.loop.additions", "ambient.underwater.loop.additions.rare"), both a button and slider are added, each using a separate translation key.
+Translation keys are generated based on the sound event ID, buttons use "group", while sliders use "value": options.sounds.group.<namespace>, options.sounds.group.<namespace>.<partial sound event>, options.sounds.value.<namespace>.<sound event>
+The namespace menu should be either skipped (if there's only one namespace (minecraft)), or allow selecting the namespace of the sound events.
+All options (buttons and sliders) should be ordered based on the displayed text, not the sound event ID; only if the displayed text is identical (which should be avoided in the first place), should the order between those options be determined by the sound event ID.
+
+
+Example applied:
+Upon selecting the "Music & Sounds..." option, the game jumps to a menu with the "Master Volume" Slider, a button reading "Category Volumes", the "Show Subtitles" option, the "Directional Audio" option and the "Audio Device" option.
+
+Going into the "Caregory Volumes" menu returns the options "Minecraft" as well as any other options added by resource packs, if multiple namespaces are present. If not, goes into the "Minecraft" menu automagically.
+No master slider is present here.
+
+Going into the "Minecraft" menu will return the options "Ambience", "Blocks", "Thorns Hit", "Entities", "Raid Horn", "Items", "Music", "Music Discs", "Soul Escape Particle", "UI" and "Weather".
+A Slider labeled "Minecraft" is at the top of the menu.
+"Thorns Hit", "Raid Horn" and "Soul Escape Particle" are sliders, that's because their sound event groups "enchantment", "event" and "particle" have no other child objects then them.
+
+Going into the "Music" menu will return the options "Creative Mode", "Credits", "Boss Fight", "The End", "Game" (Not sure what this should be called), "Menu", "The Nether", "Overworld" and "Underwater".
+A Slider labeled "Music" is at the top of the menu.
+Only "The Nether" and "Overworld" are buttons here as the rest are all final sound events.
+
+Going into the "The Nether" menu will return the options "Basalt Deltas", "Crimson Forest", "Nether Wastes" and "Soul Sand Valley"; the "Warped Forest" option is not shown as it has no sounds.
+A Slider labeled "The Nether" is at the top of the menu.
+
+
+Notes:
+In case a resource pack does add sounds to vanilla-empty sound events, it would be a good idea to add a translation string for the option still.
+Option string values should NOT be subtitle string values. "Zombie hurts" should not be displayed on the zombie's "Take Damage" slider.
