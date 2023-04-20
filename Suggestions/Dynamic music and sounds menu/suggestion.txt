@@ -19,12 +19,12 @@ All options (buttons and sliders) should be ordered based on the displayed text,
 Example applied:
 Upon selecting the "Music & Sounds..." option, the game jumps to a menu with the "Master Volume" Slider, a button reading "Category Volumes", the "Show Subtitles" option, the "Directional Audio" option and the "Audio Device" option.
 
-Going into the "Caregory Volumes" menu returns the options "Minecraft" as well as any other options added by resource packs, if multiple namespaces are present. If not, goes into the "Minecraft" menu automagically.
+Going into the "Category Volumes" menu returns the options "Minecraft" as well as any other options added by resource packs, if multiple namespaces are present. If not, goes into the "Minecraft" menu automagically.
 No master slider is present here.
 
 Going into the "Minecraft" menu will return the options "Ambience", "Blocks", "Thorns Hit", "Entities", "Raid Horn", "Items", "Music", "Music Discs", "Soul Escape Particle", "UI" and "Weather".
 A Slider labeled "Minecraft" is at the top of the menu.
-"Thorns Hit", "Raid Horn" and "Soul Escape Particle" are sliders, that's because their sound event groups "enchantment", "event" and "particle" have no other child objects then them.
+"Thorns Hit", "Raid Horn" and "Soul Escape Particle" are sliders, that's because their sound event groups "enchantment", "event" and "particle" have no other child objects than them.
 
 Going into the "Music" menu will return the options "Creative Mode", "Credits", "Boss Fight", "The End", "Game" (Not sure what this should be called), "Menu", "The Nether", "Overworld" and "Underwater".
 A Slider labeled "Music" is at the top of the menu.
