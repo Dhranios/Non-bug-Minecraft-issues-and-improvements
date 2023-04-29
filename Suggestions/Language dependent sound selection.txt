@@ -1,0 +1,42 @@
+Problem:
+Currently, voice line sounds can only be changed to another language via using a different event, requiring an in-map language option.
+
+Suggested change summary:
+Add the sounds.json type "lang" to select a file based on selected language.
+
+
+How it works:
+Rather than the "name" field refering to a sound file directly, it will refer to a folder, and the sound file to use will be the value with "/LANG_CODE" appended to it.
+The game defaults to the selected language's base dialect, and, if absent or not applicable, to en_us. This is in-line with how translation strings are handled.
+An error message should only be logged if the folder has no sound files that match the language code format at all. Sub-folders should be ignored in this check.
+
+Example applied:
+
+{
+    "voice.dreams_discovery_tour": {
+        "sounds": [
+            {
+                "type": "lang",
+                "name": "voice/dream_tour",
+                "stream": true,
+                "attenuation_distance": 300
+            }
+        ]
+    },
+    "voice.and_here_we_are.echo": {
+        "sounds": [
+            {
+                "type": "lang",
+                "name": "voice/and_here_we_are/echo_1"
+            },
+            {
+                "type": "lang",
+                "name": "voice/and_here_we_are/echo_2"
+            },
+            "voice/and_here_we_are/cracking_noise"
+        ]
+    }
+}
+
+NOTE: perhaps it's also a good idea to add a warning when the selected sound file doesn't match the selected language.
+ For example, if nl_nl is missing, it plays en_us and logs "The file minecraft:voice/dream_tour/nl_nl is missing, playing minecraft:voice/dream_tour/en_us instead for sound event minecraft:voice.dreams_discovery_tour".
