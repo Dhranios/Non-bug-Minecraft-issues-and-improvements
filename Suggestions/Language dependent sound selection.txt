@@ -8,7 +8,7 @@ Add the sounds.json type "lang" to select a file based on selected language.
 How it works:
 Rather than the "name" field refering to a sound file directly, it will refer to a folder, and the sound file to use will be the value with "/LANG_CODE" appended to it.
 The game defaults to the selected language's base dialect, and, if absent or not applicable, to en_us. This is in-line with how translation strings are handled.
-An error message should only be logged if the folder has no sound files that match the language code format at all. Sub-folders should be ignored in this check.
+An error message should only be logged if no sound will end up being played in the selected language (current language, language base dielect and en_us all missing).
 
 Example applied:
 
