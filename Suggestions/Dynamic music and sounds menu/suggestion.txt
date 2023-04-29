@@ -14,6 +14,7 @@ If the case exists where one sound event is a group of another ("ambient.underwa
 Translation keys are generated based on the sound event ID, buttons use "group", while sliders use "value": options.sounds.group.<namespace>, options.sounds.group.<namespace>.<partial sound event>, options.sounds.value.<namespace>.<sound event>
 The namespace menu should be either skipped (if there's only one namespace (minecraft)), or allow selecting the namespace of the sound events.
 All options (buttons and sliders) should be ordered based on the displayed text, not the sound event ID; only if the displayed text is identical (which should be avoided in the first place), should the order between those options be determined by the sound event ID.
+In /playsound and /stopsound the category arguments can be removed, or a variable can be set in place to still group them together (and as such allow silencing an entire group at once with /stopsound). 
 
 
 Example applied:
