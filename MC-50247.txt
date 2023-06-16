@@ -1,0 +1,56 @@
+"We decided against using UUIDs for players on scoreboards."
+"Scoreboards are not meant to be long term storage of persistent data and having players lose their scoreboard progress after a name change should not have too much impact."
+
+This is bad as scores are the only reliable way to store values on an entity (such as players); a name change losing scores will break entire maps.
+Map makers can do nothing about it breaking aside from creating a massive list of values in storage for every player, which is pretty resource intensive to find the player's data, and compare values with.
+The only real break-avoiding method that can be done by map makers is as such giving default scores to every player that lacks any scores, which will just lose data such as banking systems, current state of a system, etc.
+
+The real problem here is how to can be saved and detected while still allowing all current methods of setting scores to function. There is a solution to this, but not too easy.
+
+
+1. Format of scores should change from {Name:"<name/non-player's UUID>",Objective:"<objective>",Score:<value>,Locked:true/false} to {uuid:[I;X,X,X,X],name:"<name>",is_player:true/false,objective:"<objective>",value:<value>,enabled:true/false}
+   Locked changed to enabled with the inverse value to match the command name (scoreboard players enable).
+   Score changed to value as it's already about scores, a score with a score is weird, a score with a value is not.
+
+2. When using a name as a command target (scoreboard player set SomeName) the following data aside from actual score is saved {name:"SomeName",is_player:1b}
+
+3. When using a selector as a command target (scoreboard player set @s) the following data aside from actual score is saved {uuid:[I;X,X,X,X],name:"<name if player>",is_player:<depends on the selector result>}
+
+4. When using a UUID as a command target (scoreboard player set 1-1-1-1) the following data aside from actual score is saved {uuid:[I;1,1,1,1],is_player:0b}
+   is_player is 0b as in current systems you cannot target a player by UUID either
+
+5. When a player logs in, it checks the scores for anything without a UUID matching its name, and fills in adds the uuid field.
+   If SomePlayer with UUID 1-1-1-1 logs in, the score(s) from step 2 (and possibly 3) is/are seen and modified to have {uuid:[I;1,1,1,1]}
+
+6. When a player logs in, it checks the scores for anything matching uuid and is_player:1b, and updates the name.
+   If SomeOtherPlayer with UUID 1-1-1-1 logs in, the now edited by step 5 score(s) from step 2 (and possibly 3) is/are seen and modified to have {name:"SomeOtherPlayer"}
+
+7. When an entity is spawned/loaded it, it checks the scores for anything matching its UUID with is_player:0b.
+   If a zombie with UUID 1-1-1-1 is spawned/loaded in, only the score(s) from step 4 (and possibly 3) is/are seen, and not changed.
+   
+8. When a score is made using step 2 or 4, and a player/entity that matches is present, all data is filled in imedietly
+
+9. Converting format:
+   Case 1. Name is a stringified UUID: {Name:"<UUID>",Score:X,Locked:0b,Objective:"<objective>"} -> {uuid:[I;x,x,x,x],is_player:0b,value:X,enabled:1b,objective:"<objective>"}
+   Case 2. Name is a stringified UUID: {Name:"<UUID>",Score:X,Locked:1b,Objective:"<objective>"} -> {uuid:[I;x,x,x,x],is_player:0b,value:X,enabled:0b,objective:"<objective>"}
+   Case 3. Name is not a stringified UUID: {Name:"<name>",Score:X,Locked:0b,Objective:"<objective>"} -> {name:"<name>",is_player:1b,value:X,enabled:1b,objective:"<objective>"}
+   Case 4. Name is not a stringified UUID: {Name:"<name>",Score:X,Locked:1b,Objective:"<objective>"} -> {name:"<name>",is_player:1b,value:X,enabled:0b,objective:"<objective>"}
+
+Additionally with this format, the score display could be changed to show the name of non-players, not the UUIDs by simply making the name field also written/synchronized for non-players. (If name is absent, just show UUID then.)
+Fake players would still function as commands using # or any other disallowed symbol in the name would still save the score, and no player would ever enter the world and "claim" the score.
+For step 2, alternatively the UUID could get fetched on mojang's web services and filled in immedietly, and left absent if no player with that name exists.
+Making UUID command usage not set is_player:0b may get problematic as it's then possible for a player to get 2 scores in the same objective by having the uuid of one and the name of another.
+
+
+So, in short, this would resolve the name-changing breaking of maps, while not changing any behavior in the commands themselves.
+
+
+
+
+
+
+
+
+BTW, the same problem exists with teams, but that can simply be resolved by saving the players as UUIDs, rather than by name.
+ The only time the name entry is seen is by listing members with /team, which could check the UUIDs against online players or the user cashe of the server and replace the to-show text with the names.
+ Do change the format from strings to int arrays though, for consistency with everywhere else.
