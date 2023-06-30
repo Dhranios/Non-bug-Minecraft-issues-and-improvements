@@ -11,10 +11,10 @@ Add the following optional NBT to all entities {bossbar:{color:"<color>",style:"
 How it works:
 This NBT fully defines a boss bar inside the entity's data (with the exception of ID, text and the players that can see it).
 By default, if not provided, max should refer to the max health attribute value, and value should refer to the current health+absorption amount.
-This makes it automatically function as a health bar, but allowing it to be changes to match a score or other NBT (for example).
-For entities without health (eg a painting), the max and value objects should be required.
+This makes it automatically function as a health bar, but allowing it to be changed to match a score or other NBT (for example).
+For entities without health (eg a painting), the max and value objects should default to 0.
 The health bar will always be seen for all players that can see the entity/have the entity loaded (just like with the wither and ender dragon).
 The health bar will always have the name of the entity (with any team prefix or suffix included).
 
 Notes:
-This additiona could un-hardcode the wither and dragon boss bars, allowing map makers to add or remove them. (By default the wither would get the data, the dragon only on end fight spawning.)
+This additionally could un-hardcode the wither and dragon boss bars, allowing map makers to add or remove them. (By default the wither would get the data, the dragon only on end fight spawning.)

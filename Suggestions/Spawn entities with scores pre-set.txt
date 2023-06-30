@@ -4,7 +4,7 @@ This means that to spawn entities with scores, multiple commands (1+1 per score)
 
 
 Suggested change summary:
-Add the optionalt spawn-read-only NBT (just like the Team string) {scores:{<objective>:<value>,<objective>:{objective:"<objective>",name:"<target>"},<objective>:{objective:"<objective>",nbt:"<path>",<source>}}}
+Add the optional spawn-read-only NBT (just like the Team string) {scores:{<objective>:<value>,<objective>:{objective:"<objective>",name:"<target>"},<objective>:{objective:"<objective>",nbt:"<path>",<source>}}}
 
 
 How it works:
@@ -32,4 +32,4 @@ tag @s remove owner
 scoreboard players add @s PlacementNr
 
 Notes:
-While the example is not really smaller, for map makers this would be a huge improvement as entities spawned usually have tons of scores.
+While the example is not really smaller, for map makers this would be a huge improvement as entities spawned usually have a lot of scores. It also reduces @e usage a lot which is the most resource-intensive selector.
